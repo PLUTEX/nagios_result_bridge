@@ -83,7 +83,7 @@ class PassiveResultHandler(socketserver.StreamRequestHandler):
     def finish(self):
         super().finish()
         self.connection.close()
-        self._log('socket closed')
+        self._log('socket closed', level='debug')
 
 
 def start_listening(port, cmdfile):
