@@ -1,4 +1,4 @@
-from io import StringIO
+from io import BytesIO
 from time import time
 import pytest
 import socket
@@ -10,7 +10,7 @@ from nagios_result_bridge import PassiveResultHandler
 
 class Wrapper:
     def __init__(self):
-        self.output = StringIO()
+        self.output = BytesIO()
         self.handler = PassiveResultHandler(self.output)
         self.server = socketserver.ThreadingTCPServer(('', 0), self.handler)
         self.server_thread = threading.Thread(target=self.server.serve_forever)
@@ -41,18 +41,18 @@ def wrapper():
 
 
 def test_binary(wrapper):
-    assert wrapper.get_output(b'\xe4') == ''
+    assert wrapper.get_output(b'\xe4') == b''
 
 
 def test_invalid(wrapper):
-    assert wrapper.get_output(b'invalid format') == ''
+    assert wrapper.get_output(b'invalid format') == b''
 
 
 def test_unauthorized(wrapper):
     line = b'[%d] PROCESS_SERVICE_CHECK_RESULT;example.org;service;0;OK\n' % time()
-    assert wrapper.get_output(line) == ''
+    assert wrapper.get_output(line) == b''
 
 
 def test_success(wrapper):
     line = b'[%d] PROCESS_SERVICE_CHECK_RESULT;localhost;service;0;OK\n' % time()
-    assert wrapper.get_output(line) == line.decode('UTF-8')
+    assert wrapper.get_output(line) == line
