@@ -40,13 +40,14 @@ class PassiveResultHandler(socketserver.StreamRequestHandler):
         )
 
     def handle(self):
+        data = self.rfile.readline()
         try:
-            data = self.rfile.readline().decode('UTF-8')
+            decoded_data = data.decode('UTF-8')
         except UnicodeError:
             self._log('sent invalid UTF-8')
             return
 
-        match = self.COMMAND_REGEXP.match(data)
+        match = self.COMMAND_REGEXP.match(decoded_data)
         if not match:
             self._log(
                 'sent garbage: %r',
