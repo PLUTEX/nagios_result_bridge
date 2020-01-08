@@ -78,7 +78,6 @@ class PassiveResultHandler(socketserver.StreamRequestHandler):
             level='debug',
         )
         self.cmdfile.write(data)
-        print('written')
 
     def finish(self):
         super().finish()

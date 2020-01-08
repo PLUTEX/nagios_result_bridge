@@ -55,5 +55,4 @@ def test_unauthorized(wrapper):
 
 def test_success(wrapper):
     line = b'[%d] PROCESS_SERVICE_CHECK_RESULT;localhost;service;0;OK\n' % time()
-    print('checking')
     assert wrapper.get_output(line) == line.decode('UTF-8')
