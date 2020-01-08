@@ -6,7 +6,7 @@ import argparse
 from nagios_result_bridge import start_listening
 
 
-class JournalLoggerAction(argparse.Action):
+class LoggerHandlerAction(argparse.Action):
     def __init__(self,
                  option_strings,
                  dest=argparse.SUPPRESS,
@@ -20,6 +20,16 @@ class JournalLoggerAction(argparse.Action):
             help=help,
         )
 
+
+class SyslogLoggerAction(LoggerHandlerAction):
+    def __call__(self, parser, namespace, values, option_string=None):
+        logging.basicConfig(
+            handlers=[logging.handlers.SysLogHandler(address='/dev/log')],
+            format='%(message)s',
+        )
+
+
+class JournalLoggerAction(LoggerHandlerAction):
     def __call__(self, parser, namespace, values, option_string=None):
         try:
             from systemd.journal import JournalHandler
@@ -50,7 +60,15 @@ parser.add_argument(
     help='Filter log messages by level',
     default='warning',
 )
-parser.add_argument(
+
+loghandler_group = parser.add_mutually_exclusive_group()
+loghandler_group
+loghandler_group.add_argument(
+    '--syslog',
+    help='Use syslog for logging',
+    action=JournalLoggerAction,
+)
+loghandler_group.add_argument(
     '--journald',
     help='Use systemd journal for logging',
     action=JournalLoggerAction,
