@@ -1,0 +1,14 @@
+# Python execution
+*.pyc
+__pycache__
+
+# Python setuptools
+build
+dist
+*.egg-info
+
+# PyTest
+.cache
+
+# Tox
+.tox
