@@ -16,7 +16,7 @@ class PassiveResultHandler(socketserver.StreamRequestHandler):
         ;
         (?P<host_name>[a-zA-Z0-9\.-]+)
         ;
-        (?P<service_description>[a-zA-Z0-9\. -]+)
+        (?P<service_description>[^;~!$%^&*"|'<>?,()=]+)
         ;
         (?P<return_code>[0123])
         ;
