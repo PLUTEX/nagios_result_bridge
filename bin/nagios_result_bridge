@@ -23,8 +23,9 @@ class LoggerHandlerAction(argparse.Action):
 
 class SyslogLoggerAction(LoggerHandlerAction):
     def __call__(self, parser, namespace, values, option_string=None):
+        from logging.handlers import SysLogHandler
         logging.basicConfig(
-            handlers=[logging.handlers.SysLogHandler(address='/dev/log')],
+            handlers=[SysLogHandler(address='/dev/log')],
             format='%(message)s',
         )
 
