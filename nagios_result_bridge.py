@@ -87,6 +87,9 @@ class PassiveResultHandler(socketserver.StreamRequestHandler):
 
 
 def start_listening(port, cmdfile):
-    handler = PassiveResultHandler(cmdfile)
-    with socketserver.ThreadingTCPServer(('', port), handler) as server:
-        server.serve_forever()
+    try:
+        handler = PassiveResultHandler(cmdfile)
+        with socketserver.ThreadingTCPServer(('', port), handler) as server:
+            server.serve_forever()
+    except Exception:
+        logger.exception('Server aborted')
